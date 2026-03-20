@@ -1,0 +1,24 @@
+{
+    "name": "HTML Runner",
+    "short_name": "HTML Runner",
+    "description": "HTML file editor and runner",
+    "start_url": "/HTML-Runner-Base/",
+    "display": "standalone",
+    "background_color": "#1e1e1e",
+    "theme_color": "#1e1e1e",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "ic_launcher.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "ic_launcher.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
