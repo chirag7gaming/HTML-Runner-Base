@@ -172,25 +172,25 @@
     <div id="help-overlay">
         <div class="help-header">
             <h2>Help Me!</h2>
-            <button class="close-help" onclick="closeHelp()">✕ Close</button>
+            <button class="close-help" id="btn-close-help">✕ Close</button>
         </div>
         <div class="help-content" id="help-content">
             <div class="help-message" id="help-message">
                 <h3>Help Me!</h3>
-                <p>We hear you, HTML editing or running is hard!<br>We have a tutorial for it, <span class="continue-link" onclick="startTutorial()">Continue?</span></p>
+                <p>We hear you, HTML editing or running is hard!<br>We have a tutorial for it, <span class="continue-link" id="btn-start-tutorial">Continue?</span></p>
             </div>
             <div class="tutorial-container" id="tutorial-container" style="display: none;">
                 <canvas id="canvas"></canvas>
                 <div class="overlay">
-                    <button id="enterBtn" onclick="handleEnter()">Enter Tutorial?</button>
+                    <button id="enterBtn">Enter Tutorial?</button>
                     <div id="fileContainer">
-                        <div class="file-icon" onclick="openTutorialFile('sample')">📄<span>html.sample</span></div>
-                        <div class="file-icon" onclick="openTutorialFile('chirag')">⚙️<span>chirag.html</span></div>
-                        <div class="file-icon" onclick="openTutorialFile('howto')">📖<span>how-to.html</span></div>
+                        <div class="file-icon" data-file="sample">📄<span>html.sample</span></div>
+                        <div class="file-icon" data-file="chirag">⚙️<span>chirag.html</span></div>
+                        <div class="file-icon" data-file="howto">📖<span>how-to.html</span></div>
                     </div>
                 </div>
                 <div id="viewer">
-                    <button class="close-btn" onclick="closeTutorialFile()">CLOSE [X]</button>
+                    <button class="close-btn" id="btn-close-tutorial">CLOSE [X]</button>
                     <div id="content"></div>
                 </div>
             </div>
@@ -200,8 +200,8 @@
     <!-- Storage Header -->
     <div class="storage-header">
         <div class="storage-tabs">
-            <button class="storage-tab import-btn" onclick="triggerImport()">➕ Import File</button>
-            <button class="storage-tab" onclick="showRecentFiles()">🕘 View Recent Files</button>
+            <button class="storage-tab import-btn" id="btn-import">➕ Import File</button>
+            <button class="storage-tab" id="btn-recent">🕘 View Recent Files</button>
         </div>
         <div class="storage-info">Files: <span id="file-count">0</span></div>
     </div>
@@ -215,7 +215,7 @@
             <div class="sidebar-header">
                 <span>📁 HTML FILES</span>
                 <div class="header-actions">
-                    <span onclick="showHelp()">❓</span>
+                    <span id="btn-help">❓</span>
                 </div>
             </div>
             <div class="file-tree" id="file-tree"></div>
@@ -224,9 +224,9 @@
         <!-- Content Area -->
         <div class="content-area">
             <div class="toolbar">
-                <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
-                <button onclick="saveCurrentFile()">💾 Save</button>
-                <button class="run-btn" onclick="runCurrentFile()">▶ Run</button>
+                <button class="toggle-sidebar" id="btn-toggle-sidebar">☰</button>
+                <button id="btn-save">💾 Save</button>
+                <button class="run-btn" id="btn-run">▶ Run</button>
                 <span class="warn">⚠️ .html only</span>
             </div>
             <div class="editor-container">
@@ -236,7 +236,7 @@
             <div class="preview-panel">
                 <div class="preview-header">
                     <span>🌐 LIVE PREVIEW</span>
-                    <span onclick="refreshPreview()" style="cursor:pointer;">↻ Refresh</span>
+                    <span id="btn-refresh" style="cursor:pointer;">↻ Refresh</span>
                 </div>
                 <div class="preview-content">
                     <iframe id="preview-frame" srcdoc="<html><body style='display:flex;justify-content:center;align-items:center;height:100%;color:#666;font-family:Arial;font-size:14px;'>Select an HTML file to preview</body></html>"></iframe>
@@ -251,7 +251,7 @@
             <h3>🕘 Recent Files</h3>
             <div class="recent-list" id="recent-list"></div>
             <div class="dialog-actions">
-                <button class="cancel" onclick="closeRecentDialog()">Close</button>
+                <button class="cancel" id="btn-close-recent">Close</button>
             </div>
         </div>
     </div>
@@ -263,8 +263,8 @@
             <input type="text" id="newFileName" placeholder="filename.html" value="index.html">
             <small style="color:#888;display:block;margin-bottom:12px;">Only .html files can be created</small>
             <div class="dialog-actions">
-                <button class="cancel" onclick="closeNewFileDialog()">Cancel</button>
-                <button class="confirm" onclick="createNewHtmlFile()">Create</button>
+                <button class="cancel" id="btn-cancel-newfile">Cancel</button>
+                <button class="confirm" id="btn-confirm-newfile">Create</button>
             </div>
         </div>
     </div>
@@ -276,7 +276,7 @@
             <h3 style="text-align:center;color:#ff8a80;">Invalid File</h3>
             <div class="error-message" id="errorMessage">Only .html files are supported.</div>
             <div class="dialog-actions" style="justify-content:center;">
-                <button class="confirm" onclick="closeErrorDialog()" style="background:#f44336;width:100%;">Close</button>
+                <button class="confirm" id="btn-close-error" style="background:#f44336;width:100%;">Close</button>
             </div>
         </div>
     </div>
@@ -560,6 +560,19 @@
 
     // ==================== FILE FUNCTIONS ====================
     function closeErrorDialog() { document.getElementById('errorDialog').style.display = 'none'; }
+    function closeNewFileDialog() { document.getElementById('newFileDialog').style.display = 'none'; }
+    function showNewFileDialog() {
+        document.getElementById('newFileName').value = 'index.html';
+        document.getElementById('newFileDialog').style.display = 'flex';
+    }
+    function createNewHtmlFile() {
+        var fileName = document.getElementById('newFileName').value.trim();
+        if (!fileName) { alert('Please enter a filename'); return; }
+        if (!fileName.toLowerCase().endsWith('.html')) fileName += '.html';
+        var template = '<!DOCTYPE html>\n<html>\n<head>\n    <title>' + fileName.replace('.html','') + '</title>\n</head>\n<body>\n    <h1>Welcome to ' + fileName + '</h1>\n    <p>Created on ' + new Date().toLocaleDateString() + '</p>\n</body>\n</html>';
+        fs.addFile(fileName, template);
+        closeNewFileDialog();
+    }
 
     function saveCurrentFile() {
         if (fs.currentFile) {
@@ -619,12 +632,36 @@
 
     window.onload = function() {
         fs.renderFileTree();
-        document.addEventListener('mousemove', (e) => {
+
+        // Button event listeners
+        document.getElementById('btn-close-help').addEventListener('click', closeHelp);
+        document.getElementById('btn-start-tutorial').addEventListener('click', startTutorial);
+        document.getElementById('enterBtn').addEventListener('click', handleEnter);
+        document.getElementById('btn-close-tutorial').addEventListener('click', closeTutorialFile);
+        document.getElementById('btn-import').addEventListener('click', triggerImport);
+        document.getElementById('btn-recent').addEventListener('click', showRecentFiles);
+        document.getElementById('btn-help').addEventListener('click', showHelp);
+        document.getElementById('btn-toggle-sidebar').addEventListener('click', toggleSidebar);
+        document.getElementById('btn-save').addEventListener('click', saveCurrentFile);
+        document.getElementById('btn-run').addEventListener('click', runCurrentFile);
+        document.getElementById('btn-refresh').addEventListener('click', refreshPreview);
+        document.getElementById('btn-close-recent').addEventListener('click', closeRecentDialog);
+        document.getElementById('btn-cancel-newfile').addEventListener('click', closeNewFileDialog);
+        document.getElementById('btn-confirm-newfile').addEventListener('click', createNewHtmlFile);
+        document.getElementById('btn-close-error').addEventListener('click', closeErrorDialog);
+
+        document.querySelectorAll('.file-icon').forEach(function(el) {
+            el.addEventListener('click', function() {
+                openTutorialFile(el.getAttribute('data-file'));
+            });
+        });
+
+        document.addEventListener('mousemove', function(e) {
             if (document.getElementById('tutorial-container').style.display === 'block') {
                 tutorialMouse.x = e.clientX; tutorialMouse.y = e.clientY;
             }
         });
-        document.addEventListener('touchmove', (e) => {
+        document.addEventListener('touchmove', function(e) {
             if (document.getElementById('tutorial-container').style.display === 'block') {
                 tutorialMouse.x = e.touches[0].clientX; tutorialMouse.y = e.touches[0].clientY;
             }
