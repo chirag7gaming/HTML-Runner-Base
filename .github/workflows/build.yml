@@ -35,7 +35,7 @@ jobs:
             -keypass htmlrunner123
 
       - name: Make gradlew executable
-        run: chmod +x android/gradlew
+        run: chmod +x gradlew
 
       - name: Build Release APK
         env:
@@ -44,8 +44,8 @@ jobs:
           KEYSTORE_PASSWORD: htmlrunner123
         run: |
           mkdir -p android/app
-          cd android
-          ./gradlew assembleRelease
+          
+          cd android && ../gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
