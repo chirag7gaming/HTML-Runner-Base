@@ -23,9 +23,9 @@ jobs:
 
       - name: Generate Keystore
         run: |
-          mkdir -p android/app
+          mkdir -p app
           keytool -genkey -v \
-            -keystore android/app/keystore.jks \
+            -keystore app/keystore.jks \
             -keyalg RSA \
             -keysize 2048 \
             -validity 10000 \
@@ -42,10 +42,7 @@ jobs:
           KEY_ALIAS: htmlrunner
           KEY_PASSWORD: htmlrunner123
           KEYSTORE_PASSWORD: htmlrunner123
-        run: |
-          mkdir -p android/app
-          
-          cd android && ../gradlew assembleRelease
+        run: ./gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
