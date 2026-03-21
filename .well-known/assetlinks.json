@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.chirag7gaming.twa",
-        "sha256_cert_fingerprints": ["7B:C5:E7:87:7A:91:93:D0:21:36:CC:8E:2C:F0:BF:07:BD:64:0B:0C:DE:B7:8D:41:90:53:38:74:38:5F:40:3F"]
-      }
-    }]
